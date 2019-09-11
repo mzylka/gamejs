@@ -3,7 +3,11 @@ import Unit from './Unit';
 
 export default class Hero extends Unit {
     constructor(healthP, dmgP){
-        super(healthP, dmgP);
+        super();
+        this.stats = {
+            maxHealth: healthP,
+            basicDmg: dmgP
+        },
         this.healthPotions = 5;
     }
     get Potions(){
@@ -47,11 +51,15 @@ export default class Hero extends Unit {
             this.healthPotions -= 1;
         }
         else{
+            console.log("Full Health");
             return false;
         }
     }
     reviveHero(){
         this.isAlive = true;
         this.health += Math.round(this.stats.maxHealth / 2);
+    }
+    levelUp(){
+        this.exp
     }
 }

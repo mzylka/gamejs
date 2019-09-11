@@ -1,6 +1,9 @@
 import Unit from './Unit';
 import {createLi} from './functions';
 export default class Enemy extends Unit{
+    constructor(){
+        
+    }
     Attack(unit) {
         if(unit.returnStatus != false) {
             let mixDmg = this.stats.basicDmg * (Math.floor(Math.random() * 3) + 1);
