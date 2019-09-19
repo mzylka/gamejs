@@ -1,8 +1,8 @@
 export default class InitGame {
     constructor(){
         this.avaliablePoints = 5;
-        this.healthPoints = 10;
-        this.dmgPoints = 10;
+        this.healthPoints = 12;
+        this.dmgPoints = 2;
         this.stats = undefined;
     }
     /*Start(){
@@ -12,7 +12,7 @@ export default class InitGame {
         this.stats = undefined;
     } */
     removeHealthPoints() {
-        if (this.healthPoints >= 11) {
+        if (this.healthPoints >= 13) {
             this.avaliablePoints += 1;
             this.healthPoints -= 1;
         }
@@ -34,9 +34,9 @@ export default class InitGame {
         document.getElementById("points").innerHTML = "Avaliable points: " + this.avaliablePoints;
     }
     removeDmgPoints() {
-        if (this.dmgPoints >= 11) {
-            this.avaliablePoints = this.avaliablePoints + 1;
-            this.dmgPoints = this.dmgPoints - 1;
+        if (this.dmgPoints >= 3) {
+            this.avaliablePoints += 1;
+            this.dmgPoints -= 1;
         }
         else {
             console.log("Zero dmgPoints");

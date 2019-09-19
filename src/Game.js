@@ -15,11 +15,17 @@ export default class Game{
         <div class="stats">
             <div class="health">
                 <h4>MaxHealth: ${this.player.stats.maxHealth}</h4>
-                <h5 id="heroHealth">Health: ${this.player.health}</h5>
+                <h4 id="heroHealth">Health: ${this.player.health}</h4>
             </div>
             <div class="damage">
                 <h4>Damage: ${this.player.stats.basicDmg}</h4>
             </div>
+            <div class="experience">
+                <h5>Level: ${this.player.level}</h5>
+                <h5>Max Experience: ${this.player.maxExp}</h5>
+                <h5>Experience: ${this.player.exp}</h5>
+            </div>
+            <h5>Coins: ${this.player.coins}</h5>
         </div>`;
 
         this.mainMenu.innerHTML = 
@@ -27,17 +33,19 @@ export default class Game{
         <button id="fightButton" type="button">Fight</button>
         <button id="healButton" type="button">Drink Healing Potion</button>
         <button id="reviveButton" type="button">Revive Hero</button>
+        <button id="buyPoints" type="button">Buy Points</button>
         </div>
         `;
 
         document.querySelector("#fightButton").addEventListener("click", () => {this.Fight()});
         document.querySelector("#healButton").addEventListener("click", () => {this.Heal()});
         document.querySelector("#reviveButton").addEventListener("click", () => {this.Revive()});
+        document.querySelector("#buyPoints").addEventListener("click", () => {this.buyPoints()});
         this.checkPlayerStatus();
     }
 
     checkPlayerStatus(){
-        if(this.player.returnStatus() === false){
+        if(this.player.isAlive === false){
             document.getElementById("fightButton").disabled = true;
             document.getElementById("healButton").disabled = true;
             //document.getElementById("reviveButton").disabled = false;
@@ -50,13 +58,16 @@ export default class Game{
     }
 
     Fight(){
-        let enemy = new Enemy(100,1);
+        let enemy = new Enemy(this.player.level);
         let isPlayerRound = true;
         this.mainMenu.innerHTML = `
         <div class="fight">
             <div class="playerDiv">
                 <div class="player">
                     <table>
+                        <tr>
+                            <th>Name: ${this.player.name}</th>
+                        </tr>
                         <tr>
                             <th>Health</th>
                             <th>Damage</th> 
@@ -72,6 +83,9 @@ export default class Game{
             <div class="enemyDiv">
                 <div class="enemy">
                     <table>
+                        <tr>
+                            <th>Name: ${enemy.name}</th>
+                        </tr>
                         <tr>
                             <th>Health</th>
                             <th>Damage</th> 
@@ -98,7 +112,7 @@ export default class Game{
         this.player.drawHealth();
         enemy.drawHealth();
 
-        const f = setInterval(() => {
+        const f = setInterval(() => {   //start fight function
             if(this.player.isAlive && enemy.isAlive){
                 if(isPlayerRound === true){
                     this.player.Attack(enemy);
@@ -121,7 +135,10 @@ export default class Game{
             }
             else{
                 clearInterval(f);
-
+                if(enemy.isAlive === false){
+                    this.player.gainExp(enemy.level);
+                    this.player.gainCoins(enemy.coins);
+                }
                 let butt = document.createElement("button");
                 let text = document.createTextNode("Back to Menu");    
 
@@ -130,7 +147,7 @@ export default class Game{
                 document.getElementById("returnToMenu").appendChild(butt);
                 butt.appendChild(text);
             }
-        },1000);
+        },1000); //end fight function
     }
 
     Heal(){
@@ -143,6 +160,7 @@ export default class Game{
         <div class="reviveGame">
         <canvas width="800" height="400px" id="revgame"></canvas>
         </div>`;
+
         this.mainMenu.innerHTML = reviveGame;
 
         const x = () =>{
@@ -162,5 +180,11 @@ export default class Game{
                 ctx.drawImage(plus, x(), 0);
             });
         }
+    }
+
+    Shop(){
+        const shop = `
+        <div class="shop">
+        <div>`;
     }
 }

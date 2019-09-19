@@ -2,11 +2,10 @@
 import InitGame from './InitGame.js';
 import Game from './Game.js';
 
-let init = new InitGame();
-
-const creator = document.getElementById("creator");
+const init = new InitGame();
 let game;
 
+const creator = document.getElementById("creator");
 creator.innerHTML =
         `<h1>Create Character:</h1>
         <h3 id="points">Avaliable points: ${init.getAvaliablePoints()}</h3>
@@ -37,10 +36,9 @@ creator.innerHTML =
 
 function createGame(){
     if(init.getAvaliablePoints() != 0){
-        document.getElementById("confirmAlert").innerHTML = "Przyznaj wszystkie punkty!";
+        document.getElementById("confirmAlert").innerHTML = "Hand out all the points!";
     }
     else{
-        document.getElementById("confirmAlert").innerHTML = "Jest OK!";
         init.updateStats();
         game = new Game(init.getStats());
         game.createMenu();

@@ -1,3 +1,4 @@
+import {createLi} from './functions';
 export default class Unit {
     constructor() {
         this.stats = {
@@ -5,13 +6,12 @@ export default class Unit {
             basicDmg: undefined
         },
         this.isAlive = true;
-        this.health = healthP;
+        this.health;
         this.level = 1;
-        this.exp = 0;
-        this.maxExp = 50;
+        this.name;
     }
 
-    getDmg(dmg) {
+    takeDmg(dmg) {
         if(this.health > dmg) {
             this.health = this.health - dmg;
         }
@@ -19,26 +19,7 @@ export default class Unit {
             this.health = 0;
             this.isAlive = false;
         }
-    }
-
-    returnStats() {
-        return this.stats;
-    }
-
-    returnStatus() {
-        return this.isAlive;
-    }
-
-    returnMaxHealth(){
-        return this.stats.maxHealth;
-    }
-
-    returnHealth(){
-        return this.health;
-    }
-
-    returnBasicDmg(){
-        return this.stats.basicDmg;
+        createLi(this.name + " lost " + dmg + " healt points"); 
     }
 
     updateHealth(){
