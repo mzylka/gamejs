@@ -58,7 +58,7 @@ export default class Game{
     }
 
     Fight(){
-        let enemy = new Enemy(this.player.level);
+        const enemy = new Enemy(this.player.level);
         let isPlayerRound = true;
         this.mainMenu.innerHTML = `
         <div class="fight">
@@ -139,8 +139,8 @@ export default class Game{
                     this.player.gainExp(enemy.level);
                     this.player.gainCoins(enemy.coins);
                 }
-                let butt = document.createElement("button");
-                let text = document.createTextNode("Back to Menu");    
+                const butt = document.createElement("button");
+                const text = document.createTextNode("Back to Menu");    
 
                 butt.setAttribute("type","button");
                 butt.addEventListener("click", this.createMenu.bind(this));
@@ -156,35 +156,15 @@ export default class Game{
     }
 
     Revive(){
-        const reviveGame = `
-        <div class="reviveGame">
-        <canvas width="800" height="400px" id="revgame"></canvas>
-        </div>`;
-
-        this.mainMenu.innerHTML = reviveGame;
-
-        const x = () =>{
-            return Math.random() * (780 - 20) + 20;
-        }
-
-        const canvas = document.getElementById("revgame");
-        if(canvas.getContext){
-
-            let ctx = canvas.getContext('2d');
-            const plus = new Image();
-            plus.src = "img/plus.png";
-            
-            ctx.fillStyle = "#4d8fab";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            plus.addEventListener('load', () => {
-                ctx.drawImage(plus, x(), 0);
-            });
-        }
+        
     }
 
     Shop(){
+        let avaliablePoints = this.player.skillPoints;
+        
         const shop = `
         <div class="shop">
+            
         <div>`;
     }
 }
