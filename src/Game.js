@@ -74,10 +74,12 @@ export default class Game{
             <canvas id="maze" width="510" height="510"></canvas>
             <div id="returnToMenu"></div>
         `;
+
         const mazeGame = new Maze();
         mazeGame.draw();
 
         const playerControl = (e) =>{
+            e.preventDefault();
             switch(e.keyCode){
                 case 37:
                     if(mazeGame.checkMove('left')){

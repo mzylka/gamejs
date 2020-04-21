@@ -1,8 +1,8 @@
 export default class MazePlayer{
     constructor(){
         this.cords = {
-            x: 490,
-            y: 490
+            x: 10,
+            y: 0
         };
     }
 
