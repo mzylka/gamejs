@@ -1,4 +1,3 @@
-import {createLi} from './functions';
 export default class Unit {
     constructor() {
         this.stats = {
@@ -8,7 +7,15 @@ export default class Unit {
         this.isAlive = true;
         this.health;
         this.level = 1;
-        this.name;
+        this.id;
+    }
+
+    Attack(unit) {
+        if(unit.returnStatus !== false) {
+            let mixDmg = this.stats.basicDmg;
+            unit.takeDmg(mixDmg);
+            return mixDmg;  
+        }
     }
 
     takeDmg(dmg) {
@@ -19,7 +26,6 @@ export default class Unit {
             this.health = 0;
             this.isAlive = false;
         }
-        createLi(this.name + " lost " + dmg + " healt points"); 
     }
 
     updateHealth(){

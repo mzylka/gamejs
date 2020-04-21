@@ -1,0 +1,4 @@
+Do zrobienia:
+1. System skill points'ów - dodawanie/kupowanie umiejętności.
+2. Generowanie przeciwnika na podstawie Lvl gracza.
+3. Revive.

@@ -1,4 +1,5 @@
 import Unit from './Unit';
+
 export default class Enemy extends Unit{
     constructor(heroLvl){
         super();
@@ -13,6 +14,7 @@ export default class Enemy extends Unit{
             maxHealth: generated,
             basicDmg: generated / 4
         };
+        this.id = "Enemy";
         this.health = generated;
         this.level = heroLvl;
         this.name = this.getRandomName();
@@ -20,25 +22,6 @@ export default class Enemy extends Unit{
             (Math.random() * (10 * heroLvl)) + ((heroLvl * 10) - 9)
         );
 
-    }
-
-    Attack(unit) {
-        if(unit.returnStatus != false) {
-            let mixDmg = this.stats.basicDmg;
-            unit.takeDmg(mixDmg);  
-        }
-    }
-
-    drawHealth() {
-        let x = Math.round((100 * this.health) / this.stats.maxHealth);
-        
-        const canvas = document.getElementById("enemyHealth");
-        if(canvas.getContext) {
-            let ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, 100, 20);
-            ctx.fillStyle = 'rgb(200, 0, 0)';
-            ctx.fillRect(0, 0, x, 20);
-        }
     }
     
     getRandomName(){

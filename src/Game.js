@@ -1,6 +1,6 @@
 import Hero from './Hero';
-import Enemy from './Enemy';
-import { createLi } from './functions';
+import Maze from './Maze';
+import Fight from './Fight';
 
 export default class Game{
     constructor(stats){
@@ -30,10 +30,10 @@ export default class Game{
 
         this.mainMenu.innerHTML = 
         `<div class="Buttons">
-        <button id="fightButton" type="button">Fight</button>
-        <button id="healButton" type="button">Drink Healing Potion</button>
-        <button id="reviveButton" type="button">Revive Hero</button>
-        <button id="buyPoints" type="button">Buy Points</button>
+        <button class="button" id="fightButton" type="button">Fight</button>
+        <button class="button" id="healButton" type="button">Drink Healing Potion</button>
+        <button class="button" id="reviveButton" type="button">Revive Hero</button>
+        <button class="button" id="buyPoints" type="button">Buy Points</button>
         </div>
         `;
 
@@ -48,106 +48,20 @@ export default class Game{
         if(this.player.isAlive === false){
             document.getElementById("fightButton").disabled = true;
             document.getElementById("healButton").disabled = true;
-            //document.getElementById("reviveButton").disabled = false;
+            document.getElementById("reviveButton").disabled = false;
         }
         else{
             document.getElementById("fightButton").disabled = false;
             document.getElementById("healButton").disabled = false;
-            //document.getElementById("reviveButton").disabled = true;
+            document.getElementById("reviveButton").disabled = true;
         }
     }
 
     Fight(){
-        const enemy = new Enemy(this.player.level);
-        let isPlayerRound = true;
-        this.mainMenu.innerHTML = `
-        <div class="fight">
-            <div class="playerDiv">
-                <div class="player">
-                    <table>
-                        <tr>
-                            <th>Name: ${this.player.name}</th>
-                        </tr>
-                        <tr>
-                            <th>Health</th>
-                            <th>Damage</th> 
-                        </tr>
-                        <tr>
-                            <td>${this.player.health}</td>
-                            <td>${this.player.stats.basicDmg}</td>
-                        </tr>
-                    </table>
-                    <canvas id="playerHealth" width="100px" height="20px"></canvas>
-                </div>
-            </div>
-            <div class="enemyDiv">
-                <div class="enemy">
-                    <table>
-                        <tr>
-                            <th>Name: ${enemy.name}</th>
-                        </tr>
-                        <tr>
-                            <th>Health</th>
-                            <th>Damage</th> 
-                        </tr>
-                        <tr>
-                            <td>${enemy.health}</td>
-                            <td>${enemy.stats.basicDmg}</td>
-                        </tr>
-                    </table>
-                    <canvas id="enemyHealth" width="100px" height="20px"></canvas>
-                </div>
-            </div>
-            <div id="returnToMenu">
-            </div>
-            <div>
-                <fieldset>
-                    <legend>Fight history:</legend>
-                    <ul id="console">
-                    </ul>
-                </fieldset>
-            </div>
-        </div>`;
+        const fight = new Fight(this.player);
+        this.mainMenu.innerHTML = fight.interface;
 
-        this.player.drawHealth();
-        enemy.drawHealth();
-
-        const f = setInterval(() => {   //start fight function
-            if(this.player.isAlive && enemy.isAlive){
-                if(isPlayerRound === true){
-                    this.player.Attack(enemy);
-                    enemy.drawHealth();
-                    if(enemy.isAlive == false){
-                        createLi("Enemy is dead");
-                        return;
-                    }
-                    isPlayerRound = !isPlayerRound;
-                }
-                else{
-                    enemy.Attack(this.player);
-                    this.player.drawHealth();
-                    if(this.player.isAlive == false){
-                        createLi("Player is dead");
-                        return;
-                    }
-                    isPlayerRound = !isPlayerRound;
-                }
-            }
-            else{
-                clearInterval(f);
-                if(enemy.isAlive === false){
-                    this.player.gainExp(enemy.level);
-                    this.player.gainCoins(enemy.coins);
-                }
-                const butt = document.createElement("button");
-                const text = document.createTextNode("Back to Menu");    
-
-                butt.setAttribute("type","button");
-                butt.addEventListener("click", this.createMenu.bind(this));
-                document.getElementById("returnToMenu").appendChild(butt);
-                butt.appendChild(text);
-            }
-        },1000); //end fight function
+        fight.startFight(this.createBackToMenuButt.bind(this));       
     }
 
     Heal(){
@@ -156,15 +70,58 @@ export default class Game{
     }
 
     Revive(){
-        
+        this.mainMenu.innerHTML = `
+            <canvas id="maze" width="510" height="510"></canvas>
+            <div id="returnToMenu"></div>
+        `;
+        const mazeGame = new Maze();
+        mazeGame.draw();
+
+        const playerControl = (e) =>{
+            switch(e.keyCode){
+                case 37:
+                    if(mazeGame.checkMove('left')){
+                        mazeGame.player.moveLeft();
+                    }
+                    mazeGame.draw();
+                    break;
+                case 38:
+                    if(mazeGame.checkMove('up')){
+                        mazeGame.player.moveUp();
+                    }
+                    mazeGame.draw();
+                    break;
+                case 39:
+                    if(mazeGame.checkMove('right')){
+                        mazeGame.player.moveRight();
+                    }
+                    mazeGame.draw();
+                    break;
+                case 40:
+                    if(mazeGame.checkMove('down')){
+                        mazeGame.player.moveDown();
+                    }
+                    mazeGame.draw();
+                    break;
+            }
+            if(mazeGame.checkWinner() === true){
+                document.removeEventListener('keydown', playerControl);
+                this.player.isAlive = true;
+                this.player.health = 5;
+                this.createBackToMenuButt();
+            }
+        }
+
+        document.addEventListener('keydown', playerControl);
     }
 
-    Shop(){
-        let avaliablePoints = this.player.skillPoints;
-        
-        const shop = `
-        <div class="shop">
-            
-        <div>`;
+    createBackToMenuButt(){
+        const butt = document.createElement("button");
+        const text = document.createTextNode("Back to Menu");    
+
+        butt.setAttribute("type","button");
+        butt.addEventListener("click", this.createMenu.bind(this));
+        document.getElementById("returnToMenu").appendChild(butt);
+        butt.appendChild(text);
     }
 }
