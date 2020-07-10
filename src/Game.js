@@ -1,11 +1,12 @@
 import Hero from './Hero';
 import Maze from './Maze';
 import Fight from './Fight';
+import Store from "./Store"
 
 export default class Game{
     constructor(stats){
-        this.player = new Hero(stats.health, stats.dmg);
-        this.mainMenu = document.getElementById("main");
+        this._player = new Hero(stats.health, stats.dmg);
+        this._mainMenu = document.getElementById("main");
     }
 
     createMenu(){
@@ -13,39 +14,42 @@ export default class Game{
         `<h1>Your Champion:</h1>
         <h3 id="points">Stats:</h3>
         <div class="stats">
-            <div class="health">
-                <h4>MaxHealth: ${this.player.stats.maxHealth}</h4>
-                <h4 id="heroHealth">Health: ${this.player.health}</h4>
+            <div class="bar healthBar">
+                Health: <canvas class="healthBar__canv" id="HB" width="200px" height="32px"></canvas>
+            </div>
+            <div class="bar expBar">
+                Experience: <canvas class="expBar__canv" id="EB" width="200px" height="32px"></canvas>
+            </div>
+            <div class="level">
+                Level: ${this._player.level}
             </div>
             <div class="damage">
-                <h4>Damage: ${this.player.stats.basicDmg}</h4>
+                Damage: ${this._player.basicDmg}
             </div>
-            <div class="experience">
-                <h5>Level: ${this.player.level}</h5>
-                <h5>Max Experience: ${this.player.maxExp}</h5>
-                <h5>Experience: ${this.player.exp}</h5>
-            </div>
-            <h5>Coins: ${this.player.coins}</h5>
+                <p>Coins: ${this._player.coins}</p>
+                <p id="HP_text">Health Potions: ${this._player.healthPotions}</p>
         </div>`;
 
-        this.mainMenu.innerHTML = 
-        `<div class="Buttons">
-        <button class="button" id="fightButton" type="button">Fight</button>
-        <button class="button" id="healButton" type="button">Drink Healing Potion</button>
-        <button class="button" id="reviveButton" type="button">Revive Hero</button>
-        <button class="button" id="buyPoints" type="button">Buy Points</button>
+        this._mainMenu.innerHTML = 
+        `<div class="buttons">
+            <button class="button" id="fightButton" type="button">Fight</button>
+            <button class="button" id="healButton" type="button">Drink Healing Potion</button>
+            <button class="button" id="reviveButton" type="button">Revive Hero</button>
+            <button class="button" id="store" type="button">Store</button>
         </div>
         `;
 
-        document.querySelector("#fightButton").addEventListener("click", () => {this.Fight()});
-        document.querySelector("#healButton").addEventListener("click", () => {this.Heal()});
-        document.querySelector("#reviveButton").addEventListener("click", () => {this.Revive()});
-        document.querySelector("#buyPoints").addEventListener("click", () => {this.buyPoints()});
+        document.getElementById("fightButton").addEventListener("click", () => {this.Fight()});
+        document.getElementById("healButton").addEventListener("click", () => {this.drinkHP()});
+        document.getElementById("reviveButton").addEventListener("click", () => {this.Revive()});
+        document.getElementById("store").addEventListener("click", () => {this.Store()});
         this.checkPlayerStatus();
+        this.drawBar(this._player, "health", "HB", 200, 32);
+        this.drawBar(this._player, "experience", "EB", 200, 32);
     }
 
     checkPlayerStatus(){
-        if(this.player.isAlive === false){
+        if(this._player.isAlive === false){
             document.getElementById("fightButton").disabled = true;
             document.getElementById("healButton").disabled = true;
             document.getElementById("reviveButton").disabled = false;
@@ -58,19 +62,20 @@ export default class Game{
     }
 
     Fight(){
-        const fight = new Fight(this.player);
-        this.mainMenu.innerHTML = fight.interface;
+        const fight = new Fight(this._player);
+        this._mainMenu.innerHTML = fight.interface;
 
-        fight.startFight(this.createBackToMenuButt.bind(this));       
+        fight.startFight(this.createBackToMenuButt.bind(this), this.drawBar);       
     }
 
-    Heal(){
-        this.player.healHero();
-        document.getElementById("heroHealth").textContent = `Health: ${this.player.health}`;
+    drinkHP(){
+        this._player.healHero();
+        this.drawBar(this._player, "health", "HB", 200, 32,);
+        document.getElementById("HP_text").textContent = "Health Potions: " + this._player.healthPotions;
     }
 
     Revive(){
-        this.mainMenu.innerHTML = `
+        this._mainMenu.innerHTML = `
             <canvas id="maze" width="510" height="510"></canvas>
             <div id="returnToMenu"></div>
         `;
@@ -108,8 +113,8 @@ export default class Game{
             }
             if(mazeGame.checkWinner() === true){
                 document.removeEventListener('keydown', playerControl);
-                this.player.isAlive = true;
-                this.player.health = 5;
+                this._player.isAlive = true;
+                this._player.health.current = 5;
                 this.createBackToMenuButt();
             }
         }
@@ -117,13 +122,46 @@ export default class Game{
         document.addEventListener('keydown', playerControl);
     }
 
+    Store(){
+        const store = new Store(this._player);
+        this._mainMenu.innerHTML = store.interface;
+        store.init(this.createBackToMenuButt.bind(this));
+    }
+
     createBackToMenuButt(){
         const butt = document.createElement("button");
-        const text = document.createTextNode("Back to Menu");    
+        const text = document.createTextNode("Back to Main Menu");    
 
         butt.setAttribute("type","button");
         butt.addEventListener("click", this.createMenu.bind(this));
         document.getElementById("returnToMenu").appendChild(butt);
         butt.appendChild(text);
+    }
+
+    drawBar(unit, type, elementId, elementWidth, elementHeight){
+        const current = unit[type].current;
+        const basic = unit[type].basic;
+
+        const x = Math.round((elementWidth * current) / basic);
+        const canvas = document.getElementById(elementId);
+        if(canvas.getContext) {
+            //Bar
+            let ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, elementWidth, elementHeight);
+            if(type === "health"){
+                ctx.fillStyle = "rgb(200, 0, 0)";
+            }
+            if(type === "experience"){
+                ctx.fillStyle = "rgb(240, 201, 48)";
+            }
+            ctx.fillRect(0, 0, x, elementHeight);
+
+            //Text
+            ctx.fillStyle = "white";
+            ctx.font = canvas.height / 2 + "px Atma";
+            ctx.textAlign = "center";
+            ctx.fillText(current + "/" + basic, canvas.width / 2, (canvas.height / 2) + (canvas.height / 8));
+        }
+        
     }
 }

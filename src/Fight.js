@@ -2,30 +2,26 @@ import Enemy from './Enemy';
 
 export default class Fight{
     constructor(player){
-        this.player = player;
-        this.enemy = new Enemy(this.player.level);
-        this.isPlayerRound = true;
-        this.isFightEnd = false
+        this._player = player;
+        this._enemy = new Enemy(this._player.level);
+        this._sPlayerRound = true;
 
-        this.interface = `<div class="fight">
-        <div class="fight__statistics">
-            <h2>Name: ${this.player.id}</h2>
-
-            <span>Health: ${this.player.health}</span>
-            <span>Damage: ${this.player.stats.basicDmg}</span>
-
-            <canvas class="fight__health-bar" id="${this.player.id + 'Health'}" width="100px" height="20px"></canvas>
-        </div>
-        <div class="fight__statistics">
-            <h2>Name: ${this.enemy.name}</h2>
-
-            <span>Health: ${this.enemy.health}</span>
-            <span>Damage: ${this.enemy.stats.basicDmg}</span>
-            <canvas class="fight__health-bar" id="${this.enemy.id + 'Health'}" width="100px" height="20px"></canvas>
-        </div>
+        this._interface = `<div class="fight">
+            <div class="fight__main">
+                <div class="fight__statistics">
+                    <h2>Player</h2>
+                    <canvas class="fight__health-bar" id="HeroHealth" width="100px" height="20px"></canvas>
+                    <div>Basic damage: ${this._player.basicDmg}</div>
+                </div>
+                <div class="fight__statistics">
+                    <h2>${this._enemy.name}</h2>
+                    <canvas class="fight__health-bar" id="EnemyHealth" width="100px" height="20px"></canvas>
+                    <div>Basic damage: ${this._enemy.basicDmg}</div>
+                </div>
+            </div>
         <div id="returnToMenu">
         </div>
-        <div>
+        <div class="console">
             <fieldset>
                 <legend>Fight history:</legend>
                 <ul id="fightConsole">
@@ -35,65 +31,56 @@ export default class Fight{
         </div>`
     }
 
-    startFight(callback){
-        this.drawHealth(this.player.id, this.player.health, this.player.stats.maxHealth);
-        this.drawHealth(this.enemy.id, this.enemy.health, this.enemy.stats.maxHealth);
+    get interface(){
+        return this._interface;
+    }
+
+    startFight(callback, drawBar){
+        drawBar(this._player, "health", "HeroHealth", 100, 20);
+        drawBar(this._enemy, "health", "EnemyHealth", 100, 20);
 
         const f = setInterval(() => {
-            if(this.player.isAlive && this.enemy.isAlive){
-                if(this.isPlayerRound === true){
-                    const attack = this.player.Attack(this.enemy);
-                    this.drawHealth(this.enemy.id, this.enemy.health, this.enemy.stats.maxHealth);
-                    this.createLi(this.enemy.name + " lost " + attack + " healt points"); 
+            if(this._player.isAlive && this._enemy.isAlive){
+                if(this._isPlayerRound === true){
+                    const attack = this._player.Attack(this._enemy);
+                    drawBar(this._enemy, "health", "EnemyHealth", 100, 20);
+                    this.createLi(this._enemy.name + " lost " + attack + " healt points"); 
                     
-                    if(this.enemy.isAlive === false){
+                    if(this._enemy.isAlive === false){
                         this.createLi("Enemy is dead");
                         return;
                     }
-                    this.isPlayerRound = !this.isPlayerRound;
+                    this._isPlayerRound = !this._isPlayerRound;
                 }
                 else{
-                    const attack = this.enemy.Attack(this.player);
-                    this.drawHealth(this.player.id, this.player.health, this.player.stats.maxHealth);
-                    this.createLi(this.player.id + " lost " + attack + " healt points");
+                    const attack = this._enemy.Attack(this._player);
+                    drawBar(this._player, "health", "HeroHealth", 100, 20);
+                    this.createLi(this._player.id + " lost " + attack + " healt points");
                     
-                    if(this.player.isAlive === false){
+                    if(this._player.isAlive === false){
                         this.createLi("Player is dead");
                         return;
                     }
-                    this.isPlayerRound = !this.isPlayerRound;
+                    this._isPlayerRound = !this._isPlayerRound;
                 }
             }
             else{
                 clearInterval(f);
-                if(this.enemy.isAlive === false){
-                    const exp = this.player.gainExp(this.enemy.level);
-                    const coins = this.player.gainCoins(this.enemy.coins);
-                    this.createLi(`You gain ${exp}xp and ${coins}coins`);
+                if(this._enemy.isAlive === false){
+                    const exp = this._player.gainExp(this._enemy.level);
+                    this._player.coins = this._enemy.coins;
+                    this.createLi(`You gain ${exp}xp and ${this._enemy.coins} coins`);
                 }
                 callback();
             }
-            console.log("tura");
         },1000);
     }
 
     createLi(info){
-        let liNode = document.createElement("li");
-        let textNode = document.createTextNode(info);
+        const liNode = document.createElement("li");
+        const textNode = document.createTextNode(info);
     
         liNode.appendChild(textNode);
         document.getElementById("fightConsole").appendChild(liNode);
-    }
-
-    drawHealth(unitID, unitHealth, unitMaxHealth){
-        let x = Math.round((100 * unitHealth) / unitMaxHealth);
-        
-        const canvas = document.getElementById(unitID + "Health");
-        if(canvas.getContext) {
-            let ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, 100, 20);
-            ctx.fillStyle = 'rgb(200, 0, 0)';
-            ctx.fillRect(0, 0, x, 20);
-        }
     }
 }

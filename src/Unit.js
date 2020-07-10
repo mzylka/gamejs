@@ -1,36 +1,77 @@
 export default class Unit {
     constructor() {
-        this.stats = {
-            maxHealth: undefined,
-            basicDmg: undefined
-        },
-        this.isAlive = true;
-        this.health;
-        this.level = 1;
-        this.id;
+        this._id;
+        this._health = {
+            basic: null,
+            current: null
+        }
+        this._experience = {
+            basic: null,
+            current: null
+        }
+        this._basicDmg;
+        this._isAlive = true;
+        this._level = 1;
+        this._coins;
+    }
+
+    get id(){
+        return this._id;
+    }
+
+    get health(){
+        return this._health;
+    }
+
+    get experience(){
+        return this._experience;
+    }
+
+    get basicDmg(){
+        return this._basicDmg;
+    }
+
+    get isAlive(){
+        return this._isAlive;
+    }
+
+    set isAlive(b){
+        this._isAlive = b; 
+    }
+
+    get level(){
+        return this._level;
+    }
+
+    get coins(){
+        return this._coins;
+    }
+
+    set coins(n){
+        this._coins = n;
     }
 
     Attack(unit) {
-        if(unit.returnStatus !== false) {
-            let mixDmg = this.stats.basicDmg;
+        if(unit.isAlive !== false) {
+            let mixDmg = this._basicDmg;
             unit.takeDmg(mixDmg);
             return mixDmg;  
         }
     }
 
     takeDmg(dmg) {
-        if(this.health > dmg) {
-            this.health = this.health - dmg;
+        if(this._health.current > dmg) {
+            this._health.current = this._health.current - dmg;
         }
         else {
-            this.health = 0;
-            this.isAlive = false;
+            this._health.current = 0;
+            this._isAlive = false;
         }
     }
 
     updateHealth(){
-        this.maxHealth += 1;
-        this.health += 1;
+        this._health.basic += 1;
+        this._health.current += 1;
     }
 
 }

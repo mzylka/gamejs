@@ -1,9 +1,9 @@
 //BASE
 
 //colors:
-$color-primary:#1565c0;
-$color-primary-dark:#003c8f;
-$color-primary-light:#5e92f3;
+$color-primary:#4d4d4d;
+$color-primary-dark:#313131;
+$color-primary-light:#b4b4b4;
 
 
 *{
@@ -23,15 +23,21 @@ html{
 }
 
 body{
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Atma', cursive;
     font-weight: 400;
     line-height: 1.6;
     color: #fff;
-    background-image: linear-gradient(to bottom, $color-primary, $color-primary-dark);
-    background-size: cover;
-    background-repeat: no-repeat;
+    background-color: $color-primary;
 
     min-height: 100vh;
+}
+
+button{
+    font-family: inherit;
+    font-size: 2rem;
+    border: 2px solid #111;
+    padding: 0 1rem;
+    margin: .5rem;
 }
 
 //Layout
@@ -55,11 +61,28 @@ body{
 
 
 //Components
+.buttons{
+    max-width: 50rem;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
 .button{
-    border: none;
+    border: 2px solid #111;
     background-color: $color-primary-light;
     font-size: 1.6rem;
-    border-radius: 100px;
     padding: 1rem 2rem;
     cursor: pointer;
+}
+.fight{
+    max-width: 50rem;
+    margin: 0 auto;
+
+    &__main{
+        display: flex;
+        justify-content: center;
+    }
+    &__statistics{
+
+    }
 }

@@ -2,10 +2,14 @@ import MazePlayer from './MazePlayer';
 
 export default class Maze{
     constructor(){
-        this.canvas = document.getElementById('maze');
-        this.ctx = this.canvas.getContext('2d');
-        this.player = new MazePlayer();
-        this.maze = this.displayMaze(this.generateMaze(25,25));
+        this._canvas = document.getElementById('maze');
+        this._ctx = this._canvas.getContext('2d');
+        this._player = new MazePlayer();
+        this._maze = this.displayMaze(this.generateMaze(25,25));
+    }
+
+    get player(){
+        return this._player;
     }
 
     start(){
@@ -14,15 +18,15 @@ export default class Maze{
     }
 
     draw(){
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            this.drawGrid();
-            this.drawMaze();
-            this.drawEndPoint();
-            this.drawPlayer();
+        this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
+        this.drawGrid();
+        this.drawMaze();
+        this.drawEndPoint();
+        this.drawPlayer();
     }
 
     drawGrid(){
-        const ctx = this.ctx;
+        const ctx = this._ctx;
         ctx.fillStyle = 'rgb(192, 192, 192)';
         ctx.fillRect(0,0,510,510);
     
@@ -39,10 +43,10 @@ export default class Maze{
     }
 
     drawMaze(){
-        const ctx = this.ctx;
+        const ctx = this._ctx;
         let CordY = 0;
     
-        this.maze.forEach(element => {
+        this._maze.forEach(element => {
             let CordX = 0;
     
             element.forEach(item =>{
@@ -58,13 +62,13 @@ export default class Maze{
     }
 
     drawPlayer(){
-        const ctx = this.ctx;
+        const ctx = this._ctx;
         ctx.fillStyle = 'rgb(255, 0, 0)';
-        ctx.fillRect(this.player.cords.x, this.player.cords.y, 10, 10);
+        ctx.fillRect(this._player.cords.x, this._player.cords.y, 10, 10);
     }
 
     drawEndPoint(){
-        const ctx = this.ctx;
+        const ctx = this._ctx;
         ctx.fillStyle = 'rgb(0, 200, 0)';
         ctx.fillRect(500, 490, 10, 10);
     }
@@ -75,25 +79,25 @@ export default class Maze{
                 switch(e.keyCode){
                     case 37:
                         if(this.checkMove('left')){
-                            this.player.moveLeft();
+                            this._player.moveLeft();
                         }
                         this.draw();
                         break;
                     case 38:
                         if(this.checkMove('up')){
-                            this.player.moveUp();
+                            this._player.moveUp();
                         }
                         this.draw();
                         break;
                     case 39:
                         if(this.checkMove('right')){
-                            this.player.moveRight();
+                            this._player.moveRight();
                         }
                         this.draw();
                         break;
                     case 40:
                         if(this.checkMove('down')){
-                            this.player.moveDown();
+                            this._player.moveDown();
                         }
                         this.draw();
                         break;
@@ -106,14 +110,14 @@ export default class Maze{
     }
 
     checkMove(direction){
-        let x = (this.player.cords.x / 10);
-        let y = (this.player.cords.y / 10);
+        let x = (this._player.cords.x / 10);
+        let y = (this._player.cords.y / 10);
     
         switch(direction){
             case "left":
                 let left = x - 1;
     
-                if(this.maze[y][left] === true){
+                if(this._maze[y][left] === true){
                     return false;
                 }
                 else return true;
@@ -121,7 +125,7 @@ export default class Maze{
             case "right":
                 let right = x + 1;
     
-                if(this.maze[y][right] === true){
+                if(this._maze[y][right] === true){
                     return false;
                 }
                 else return true;
@@ -129,7 +133,7 @@ export default class Maze{
             case "up":
                 let up = y - 1;
     
-                if(this.maze[up][x] === true){
+                if(this._maze[up][x] === true){
                     return false;
                 }
                 else return true;
@@ -137,7 +141,7 @@ export default class Maze{
             case "down":
                 let down = y + 1;
     
-                if(this.maze[down][x] === true){
+                if(this._maze[down][x] === true){
                     return false;
                 }
                 else return true;
@@ -145,7 +149,7 @@ export default class Maze{
     }
 
     checkWinner(){
-        if(this.player.cords.x === 500 && this.player.cords.y === 490){
+        if(this._player.cords.x === 500 && this._player.cords.y === 490){
             return true;
         }
         else return false;
@@ -217,7 +221,6 @@ export default class Maze{
     
             text.push(line);
         }
-        console.log(text);
         return text;
     }
 }

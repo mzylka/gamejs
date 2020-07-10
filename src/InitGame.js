@@ -1,9 +1,9 @@
 export default class InitGame {
     constructor(){
-        this.avaliablePoints = 5;
-        this.healthPoints = 12;
-        this.dmgPoints = 2;
-        this.stats = undefined;
+        this.avaliablePoints = 10;
+        this.healthPoints = 20;
+        this.dmgPoints = 10;
+        this.stats;
     }
     
     removeHealthPoints() {

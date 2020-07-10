@@ -1,30 +1,34 @@
 export default class MazePlayer{
     constructor(){
-        this.cords = {
+        this._cords = {
             x: 10,
             y: 0
         };
     }
 
+    get cords(){
+        return this._cords;
+    }
+
     checkBorder(){
-        if (this.cords.y === 0){
+        if (this._cords.y === 0){
             return false;
         }
         else return true;
     }
     moveUp(){
         if (this.checkBorder() === true){
-            this.cords.y -= 10;
+            this._cords.y -= 10;
         }
     }
     moveDown(){
-        this.cords.y += 10;
+        this._cords.y += 10;
     }
     moveRight(){
-        this.cords.x += 10;
+        this._cords.x += 10;
     }
     moveLeft(){
-        this.cords.x -= 10;
+        this._cords.x -= 10;
     }
 
 }
