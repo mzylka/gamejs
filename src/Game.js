@@ -76,7 +76,9 @@ export default class Game{
 
     Revive(){
         this._mainMenu.innerHTML = `
-            <canvas id="maze" width="510" height="510"></canvas>
+            <div class="maze-box">
+                <canvas id="maze" width="510" height="510"></canvas>
+            </div>
             <div id="returnToMenu"></div>
         `;
 

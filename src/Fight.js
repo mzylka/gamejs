@@ -4,7 +4,7 @@ export default class Fight{
     constructor(player){
         this._player = player;
         this._enemy = new Enemy(this._player.level);
-        this._sPlayerRound = true;
+        this._isPlayerRound = true;
 
         this._interface = `<div class="fight">
             <div class="fight__main">
@@ -68,7 +68,7 @@ export default class Fight{
                 clearInterval(f);
                 if(this._enemy.isAlive === false){
                     const exp = this._player.gainExp(this._enemy.level);
-                    this._player.coins = this._enemy.coins;
+                    this._player.coins += this._enemy.coins;
                     this.createLi(`You gain ${exp}xp and ${this._enemy.coins} coins`);
                 }
                 callback();

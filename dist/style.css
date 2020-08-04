@@ -41,6 +41,11 @@ button {
   margin-top: 2rem;
   border-radius: .3rem; }
 
+.maze-box {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center; }
+
 .buttons {
   max-width: 50rem;
   margin: auto;

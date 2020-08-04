@@ -8,16 +8,16 @@ let game;
 const creator = document.getElementById("creator");
 creator.innerHTML =
     `<h1>Create Character</h1>
-    <h3 id="points">Avaliable points: ${init.getAvaliablePoints()}</h3>
+    <h3 id="points">Avaliable points: ${init.avaliablePoints}</h3>
     <div class="stats">
         <div class="health">
             <button id="minusH" type="button">-</button>
-            <span id="healthPoints">Health: ${init.getHealthPoints()}</span>
+            <span id="healthPoints">Health: ${init.healthPoints}</span>
             <button id="plusH" type="button">+</button>
         </div>
         <div class="damage">
             <button id="minusD" type="button">-</button>
-            <span id="dmgPoints">Damage: ${init.getDmgPoints()}</span>
+            <span id="dmgPoints">Damage: ${init.dmgPoints}</span>
             <button id="plusD" type="button">+</button>
         </div>
         <div class="confirm">
@@ -27,20 +27,20 @@ creator.innerHTML =
         </div>
     </div>`;
     
-document.querySelector("#minusH").addEventListener('click', init.removeHealthPoints.bind(init));
-document.querySelector("#plusH").addEventListener('click', init.addHealthPoints.bind(init));
-document.querySelector("#minusD").addEventListener('click', init.removeDmgPoints.bind(init));
-document.querySelector("#plusD").addEventListener('click', init.addDmgPoints.bind(init));
+document.querySelector("#minusH").addEventListener('click', () => {init.removePoints(true)});
+document.querySelector("#plusH").addEventListener('click', () => {init.addPoints(true)});
+document.querySelector("#minusD").addEventListener('click', () => {init.removePoints(false)});
+document.querySelector("#plusD").addEventListener('click', () => {init.addPoints(false)});
 document.querySelector("#confirmButt").addEventListener('click', createGame);
 
 
 function createGame(){
-    if(init.getAvaliablePoints() != 0){
+    if(init.avaliablePoints != 0){
         document.getElementById("confirmAlert").innerHTML = "Hand out all the points!";
     }
     else{
         init.updateStats();
-        game = new Game(init.getStats());
+        game = new Game(init.stats);
         game.createMenu();
     }
 }

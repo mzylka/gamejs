@@ -13,7 +13,7 @@ export default class Hero extends Unit {
             current: 0
         }
         this._basicDmg = dmgP;
-        this._healthPotions = 5;
+        this._healthPotions = 6;
         this._coins = 10;
     }
 

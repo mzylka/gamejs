@@ -12,7 +12,7 @@ export default class Unit {
         this._basicDmg;
         this._isAlive = true;
         this._level = 1;
-        this._coins;
+        this._coins = 0;
     }
 
     get id(){

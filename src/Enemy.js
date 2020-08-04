@@ -5,7 +5,7 @@ export default class Enemy extends Unit{
         super();
         this._id = "Enemy";
 
-        let basicHealth = 10 * heroLvl;
+        const basicHealth = 10 + heroLvl;
         let generated = 0;
 
         for(let i = 1; i <= heroLvl; i++){
@@ -16,11 +16,11 @@ export default class Enemy extends Unit{
             basic: generated,
             current: generated
         };
-        this._basicDmg = Math.floor(generated / 5)
+        this._basicDmg = heroLvl + 1;
         this._level = heroLvl;
         this._name = this.getRandomName();
         this._coins = Math.floor(
-            (Math.random() * (10 * heroLvl)) + ((heroLvl * 10) - 9)
+            (Math.random() * (10 * heroLvl)) + heroLvl * 10
         );
     }
 
@@ -29,8 +29,8 @@ export default class Enemy extends Unit{
     }
     
     getRandomName(){
-        let names = ["Rat", "Wolf", "Scarecrow", "Bandit", "Werewolf", "Vampir", "Gnome"];
-        let random = Math.floor(Math.random() * 7);
+        const names = ["Rat", "Wolf", "Scarecrow", "Bandit", "Werewolf", "Vampir", "Gnome"];
+        const random = Math.floor(Math.random() * 7);
         return names[random];
     }
 }
