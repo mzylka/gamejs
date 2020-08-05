@@ -26,7 +26,7 @@ export default class Game{
             <div class="damage">
                 Damage: ${this._player.basicDmg}
             </div>
-                <p>Coins: ${this._player.coins}</p>
+                <p id="playerCoins">Coins: ${this._player.coins}</p>
                 <p id="HP_text">Health Potions: ${this._player.healthPotions}</p>
         </div>`;
 

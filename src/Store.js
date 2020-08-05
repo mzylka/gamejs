@@ -4,21 +4,15 @@ export default class Store{
 
         this.interface = `
             <div class="store">
-                <div class="shop__player">
-                    <p id="playerCoins">Player coins: ${this._player.coins}</p>
-                    <p id="playerHP">Player health potions: ${this._player.healthPotions}</p>
-                </div>
                 <div class="store__offers">
                     <div class="store__healthPoints">
-                        <p>Price for health potion: 5 coins</p>
+                    <div class="store__info">Health Potions:</div>
                         <div class="store__buttons">
-                            <button id="buyHP1" type="button">Buy 1</button>
-                            <button id="buyHP5" type="button">Buy 5</button>
-                            <button id="buyHP10" type="button">Buy 10</button>
+                            <button id="buyHP1" type="button">Buy 1 for 5 coins</button>
+                            <button id="buyHP5" type="button">Buy 5 for 25 coins</button>
+                            <button id="buyHP10" type="button">Buy 10 for 50 coins</button>
                         </div>
                     </div>
-                </div>
-                <div class="store__info">
                 </div>
                 <div id="returnToMenu">
                 </div>
@@ -38,11 +32,11 @@ export default class Store{
             const cost = number * 5;
             this._player.coins -= cost;
             this._player[productName] += number;
-            document.querySelector(".store__info").innerHTML = `<span>You bought ${number} ${productName} for ${cost} coins</span>`;
-            document.getElementById("playerCoins").textContent = "Player coins: " + this._player.coins;
+            document.querySelector(".store__info").innerHTML = `<span>You bought ${number} of ${productName} for ${cost} coins</span>`;
+            document.getElementById("playerCoins").textContent = "Coins: " + this._player.coins;
 
             if(productName === "healthPotions"){
-                document.getElementById("playerHP").textContent = "Player health potions: " + this._player.healthPotions;
+                document.getElementById("HP_text").textContent = "Health potions: " + this._player.healthPotions;
             }
         }
         else{

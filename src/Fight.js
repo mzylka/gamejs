@@ -19,14 +19,14 @@ export default class Fight{
                     <div>Basic damage: ${this._enemy.basicDmg}</div>
                 </div>
             </div>
-        <div id="returnToMenu">
-        </div>
         <div class="console">
             <fieldset>
                 <legend>Fight history:</legend>
                 <ul id="fightConsole">
                 </ul>
             </fieldset>
+        </div>
+        <div id="returnToMenu">
         </div>
         </div>`
     }
@@ -58,7 +58,7 @@ export default class Fight{
                     this.createLi(this._player.id + " lost " + attack + " healt points");
                     
                     if(this._player.isAlive === false){
-                        this.createLi("Player is dead");
+                        this.createLi("Player is dead, you LOSE!");
                         return;
                     }
                     this._isPlayerRound = !this._isPlayerRound;
@@ -69,7 +69,7 @@ export default class Fight{
                 if(this._enemy.isAlive === false){
                     const exp = this._player.gainExp(this._enemy.level);
                     this._player.coins += this._enemy.coins;
-                    this.createLi(`You gain ${exp}xp and ${this._enemy.coins} coins`);
+                    this.createLi(`You WIN and gain ${exp}xp and ${this._enemy.coins} coins`);
                 }
                 callback();
             }

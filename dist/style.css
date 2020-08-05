@@ -33,7 +33,7 @@ button {
 
 .creator {
   margin-top: 2rem;
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   border-radius: .3rem;
   text-align: center; }
 
@@ -53,6 +53,7 @@ button {
   flex-direction: column; }
 
 .button {
+  display: block;
   border: 2px solid #111;
   background-color: #b4b4b4;
   font-size: 1.6rem;
@@ -61,7 +62,25 @@ button {
 
 .fight {
   max-width: 50rem;
-  margin: 0 auto; }
+  margin: 0 auto;
+  font-size: 1.6rem; }
   .fight__main {
     display: flex;
     justify-content: center; }
+  .fight__statistics {
+    margin: 1rem 2rem; }
+  .fight .console ul {
+    list-style: none; }
+    .fight .console ul li {
+      margin-left: 0.5rem; }
+
+.store {
+  font-size: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
+  .store__info {
+    text-align: center; }
+
+#returnToMenu {
+  text-align: center; }
