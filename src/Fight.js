@@ -1,49 +1,24 @@
 import Enemy from './Enemy';
+import GameInterface from './GameInterface';
 
 export default class Fight{
     constructor(player){
         this._player = player;
         this._enemy = new Enemy(this._player.level);
-        this._isPlayerRound = true;
-
-        this._interface = `<div class="fight">
-            <div class="fight__main">
-                <div class="fight__statistics">
-                    <h2>Player</h2>
-                    <canvas class="fight__health-bar" id="HeroHealth" width="100px" height="20px"></canvas>
-                    <div>Basic damage: ${this._player.basicDmg}</div>
-                </div>
-                <div class="fight__statistics">
-                    <h2>${this._enemy.name}</h2>
-                    <canvas class="fight__health-bar" id="EnemyHealth" width="100px" height="20px"></canvas>
-                    <div>Basic damage: ${this._enemy.basicDmg}</div>
-                </div>
-            </div>
-        <div class="console">
-            <fieldset>
-                <legend>Fight history:</legend>
-                <ul id="fightConsole">
-                </ul>
-            </fieldset>
-        </div>
-        <div id="returnToMenu">
-        </div>
-        </div>`
+        this._isPlayerRound = true;      
     }
 
-    get interface(){
-        return this._interface;
-    }
 
-    startFight(callback, drawBar){
-        drawBar(this._player, "health", "HeroHealth", 100, 20);
-        drawBar(this._enemy, "health", "EnemyHealth", 100, 20);
+    startFight(callback){
+        GameInterface.createFightMenu(this._player.basicDmg, this._enemy.name, this._enemy.basicDmg);
+        GameInterface.drawBar(this._player, "health", "HeroHealth", 100, 20);
+        GameInterface.drawBar(this._enemy, "health", "EnemyHealth", 100, 20);
 
         const f = setInterval(() => {
             if(this._player.isAlive && this._enemy.isAlive){
                 if(this._isPlayerRound === true){
                     const attack = this._player.Attack(this._enemy);
-                    drawBar(this._enemy, "health", "EnemyHealth", 100, 20);
+                    GameInterface.drawBar(this._enemy, "health", "EnemyHealth", 100, 20);
                     this.createLi(this._enemy.name + " lost " + attack + " healt points"); 
                     
                     if(this._enemy.isAlive === false){
@@ -54,7 +29,7 @@ export default class Fight{
                 }
                 else{
                     const attack = this._enemy.Attack(this._player);
-                    drawBar(this._player, "health", "HeroHealth", 100, 20);
+                    GameInterface.drawBar(this._player, "health", "HeroHealth", 100, 20);
                     this.createLi(this._player.id + " lost " + attack + " healt points");
                     
                     if(this._player.isAlive === false){
@@ -71,7 +46,8 @@ export default class Fight{
                     this._player.coins += this._enemy.coins;
                     this.createLi(`You WIN and gain ${exp}xp and ${this._enemy.coins} coins`);
                 }
-                callback();
+                const backButton = GameInterface.createBackToMenuButt();
+                backButton.addEventListener("click", () => {callback(this._player)});
             }
         },1000);
     }

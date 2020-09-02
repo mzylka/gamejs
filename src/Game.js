@@ -2,6 +2,7 @@ import Hero from './Hero';
 import Maze from './Maze';
 import Fight from './Fight';
 import Store from "./Store"
+import GameInterface from './GameInterface';
 
 export default class Game{
     constructor(stats){
@@ -9,43 +10,16 @@ export default class Game{
         this._mainMenu = document.getElementById("main");
     }
 
-    createMenu(){
-        creator.innerHTML =
-        `<h1>Your Champion:</h1>
-        <h3 id="points">Stats:</h3>
-        <div class="stats">
-            <div class="bar healthBar">
-                Health: <canvas class="healthBar__canv" id="HB" width="200px" height="32px"></canvas>
-            </div>
-            <div class="bar expBar">
-                Experience: <canvas class="expBar__canv" id="EB" width="200px" height="32px"></canvas>
-            </div>
-            <div class="level">
-                Level: ${this._player.level}
-            </div>
-            <div class="damage">
-                Damage: ${this._player.basicDmg}
-            </div>
-                <p id="playerCoins">Coins: ${this._player.coins}</p>
-                <p id="HP_text">Health Potions: ${this._player.healthPotions}</p>
-        </div>`;
-
-        this._mainMenu.innerHTML = 
-        `<div class="buttons">
-            <button class="button" id="fightButton" type="button">Fight</button>
-            <button class="button" id="healButton" type="button">Drink Healing Potion</button>
-            <button class="button" id="reviveButton" type="button">Revive Hero</button>
-            <button class="button" id="store" type="button">Store</button>
-        </div>
-        `;
+    createMenu(player = this._player){
+        GameInterface.createMainMenu(player.level, player.basicDmg, player.coins, player.healthPotions);
 
         document.getElementById("fightButton").addEventListener("click", () => {this.Fight()});
         document.getElementById("healButton").addEventListener("click", () => {this.drinkHP()});
         document.getElementById("reviveButton").addEventListener("click", () => {this.Revive()});
         document.getElementById("store").addEventListener("click", () => {this.Store()});
         this.checkPlayerStatus();
-        this.drawBar(this._player, "health", "HB", 200, 32);
-        this.drawBar(this._player, "experience", "EB", 200, 32);
+        GameInterface.drawBar(player, "health", "HB", 200, 32);
+        GameInterface.drawBar(player, "experience", "EB", 200, 32);
     }
 
     checkPlayerStatus(){
@@ -63,9 +37,8 @@ export default class Game{
 
     Fight(){
         const fight = new Fight(this._player);
-        this._mainMenu.innerHTML = fight.interface;
 
-        fight.startFight(this.createBackToMenuButt.bind(this), this.drawBar);       
+        fight.startFight(this.createMenu.bind(this));       
     }
 
     drinkHP(){
@@ -75,12 +48,7 @@ export default class Game{
     }
 
     Revive(){
-        this._mainMenu.innerHTML = `
-            <div class="maze-box">
-                <canvas id="maze" width="510" height="510"></canvas>
-            </div>
-            <div id="returnToMenu"></div>
-        `;
+        GameInterface.createReviveMenu();
 
         const mazeGame = new Maze();
         mazeGame.draw();
@@ -164,6 +132,5 @@ export default class Game{
             ctx.textAlign = "center";
             ctx.fillText(current + "/" + basic, canvas.width / 2, (canvas.height / 2) + (canvas.height / 8));
         }
-        
     }
 }

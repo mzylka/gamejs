@@ -1,3 +1,5 @@
+import GameInterface from './GameInterface';
+
 export default class InitGame {
     constructor(){
         this._avaliablePoints = 2;
@@ -30,8 +32,7 @@ export default class InitGame {
             this._avaliablePoints -= 1;
             isHealth === true ? this._healthPoints += 1 : this._dmgPoints += 1;
         }
-        isHealth === "health" ? document.getElementById("healthPoints").innerHTML = "Health: " + this._healthPoints : document.getElementById("dmgPoints").innerHTML = "Damage: " + this._dmgPoints;
-        document.getElementById("points").innerHTML = "Avaliable points: " + this._avaliablePoints;
+        GameInterface.updateStartMenu(this.avaliablePoints, this.healthPoints, this.dmgPoints);
     }
 
     removePoints(isHealth){
@@ -53,11 +54,23 @@ export default class InitGame {
                 console.log("Zero dmgPoints");
             }
         }
-        isHealth === "health" ? document.getElementById("healthPoints").innerHTML = "Health: " + this._healthPoints : document.getElementById("dmgPoints").innerHTML = "Damage: " + this._dmgPoints;
-        document.getElementById("points").innerHTML = "Avaliable points: " + this._avaliablePoints;
+        GameInterface.updateStartMenu(this.avaliablePoints, this.healthPoints, this.dmgPoints);
     }
 
     updateStats() {
         this._stats = { health: this._healthPoints, dmg: this._dmgPoints };
+    }
+
+    updateMenu(){
+        document.getElementById("skillPoints").textContent = `Avaliable points: ${this.avaliablePoints}`;
+        document.getElementById("healthPoints").textContent = `Health: ${this.healthPoints}`;
+        document.getElementById("dmgPoints").textContent = `Damage: ${this.dmgPoints}`;
+    }
+
+    events(){
+        document.querySelector("#minusH").addEventListener('click', () => {this.removePoints(true)});
+        document.querySelector("#plusH").addEventListener('click', () => {this.addPoints(true)});
+        document.querySelector("#minusD").addEventListener('click', () => {this.removePoints(false)});
+        document.querySelector("#plusD").addEventListener('click', () => {this.addPoints(false)});
     }
 }

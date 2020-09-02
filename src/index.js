@@ -1,42 +1,25 @@
 'use strict';
-import InitGame from './InitGame.js';
-import Game from './Game.js';
+import InitGame from './InitGame';
+import Game from './Game';
+import GameInterface from './GameInterface';
 
+console.log("wtf");
+
+//const ui = new Interface();
 const init = new InitGame();
+
 let game;
 
-const creator = document.getElementById("creator");
-creator.innerHTML =
-    `<h1>Create Character</h1>
-    <h3 id="points">Avaliable points: ${init.avaliablePoints}</h3>
-    <div class="stats">
-        <div class="health">
-            <button id="minusH" type="button">-</button>
-            <span id="healthPoints">Health: ${init.healthPoints}</span>
-            <button id="plusH" type="button">+</button>
-        </div>
-        <div class="damage">
-            <button id="minusD" type="button">-</button>
-            <span id="dmgPoints">Damage: ${init.dmgPoints}</span>
-            <button id="plusD" type="button">+</button>
-        </div>
-        <div class="confirm">
-            <button id="confirmButt" type="button">Confirm</button>
-        </div>
-        <div id="confirmAlert">
-        </div>
-    </div>`;
-    
-document.querySelector("#minusH").addEventListener('click', () => {init.removePoints(true)});
-document.querySelector("#plusH").addEventListener('click', () => {init.addPoints(true)});
-document.querySelector("#minusD").addEventListener('click', () => {init.removePoints(false)});
-document.querySelector("#plusD").addEventListener('click', () => {init.addPoints(false)});
-document.querySelector("#confirmButt").addEventListener('click', createGame);
+//Create interface
+GameInterface.createStartMenu(init.avaliablePoints, init.healthPoints, init.dmgPoints);
+init.events();
 
+//Create game by click button
+document.querySelector("#confirmButt").addEventListener('click', createGame);
 
 function createGame(){
     if(init.avaliablePoints != 0){
-        document.getElementById("confirmAlert").innerHTML = "Hand out all the points!";
+        GameInterface.createStartMenuAlert();
     }
     else{
         init.updateStats();
