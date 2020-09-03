@@ -46,8 +46,7 @@ export default class Fight{
                     this._player.coins += this._enemy.coins;
                     this.createLi(`You WIN and gain ${exp}xp and ${this._enemy.coins} coins`);
                 }
-                const backButton = GameInterface.createBackToMenuButt();
-                backButton.addEventListener("click", () => {callback(this._player)});
+                callback();
             }
         },1000);
     }

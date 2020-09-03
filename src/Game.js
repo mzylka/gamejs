@@ -10,16 +10,16 @@ export default class Game{
         this._mainMenu = document.getElementById("main");
     }
 
-    createMenu(player = this._player){
-        GameInterface.createMainMenu(player.level, player.basicDmg, player.coins, player.healthPotions);
+    createMenu(){
+        GameInterface.createMainMenu(this._player.level, this._player.basicDmg, this._player.coins, this._player.healthPotions);
 
         document.getElementById("fightButton").addEventListener("click", () => {this.Fight()});
         document.getElementById("healButton").addEventListener("click", () => {this.drinkHP()});
         document.getElementById("reviveButton").addEventListener("click", () => {this.Revive()});
         document.getElementById("store").addEventListener("click", () => {this.Store()});
         this.checkPlayerStatus();
-        GameInterface.drawBar(player, "health", "HB", 200, 32);
-        GameInterface.drawBar(player, "experience", "EB", 200, 32);
+        GameInterface.drawBar(this._player, "health", "HB", 200, 32);
+        GameInterface.drawBar(this._player, "experience", "EB", 200, 32);
     }
 
     checkPlayerStatus(){
@@ -38,12 +38,12 @@ export default class Game{
     Fight(){
         const fight = new Fight(this._player);
 
-        fight.startFight(this.createMenu.bind(this));       
+        fight.startFight(this.createBackToMenuButt.bind(this));       
     }
 
     drinkHP(){
         this._player.healHero();
-        this.drawBar(this._player, "health", "HB", 200, 32,);
+        GameInterface.drawBar(this._player, "health", "HB", 200, 32,);
         document.getElementById("HP_text").textContent = "Health Potions: " + this._player.healthPotions;
     }
 
@@ -94,43 +94,13 @@ export default class Game{
 
     Store(){
         const store = new Store(this._player);
-        this._mainMenu.innerHTML = store.interface;
-        store.init(this.createBackToMenuButt.bind(this));
+        GameInterface.createStoreMenu();
+        store.init();
+        this.createBackToMenuButt();
     }
 
     createBackToMenuButt(){
-        const butt = document.createElement("button");
-        const text = document.createTextNode("Back to Main Menu");    
-
-        butt.setAttribute("type","button");
-        butt.addEventListener("click", this.createMenu.bind(this));
-        document.getElementById("returnToMenu").appendChild(butt);
-        butt.appendChild(text);
-    }
-
-    drawBar(unit, type, elementId, elementWidth, elementHeight){
-        const current = unit[type].current;
-        const basic = unit[type].basic;
-
-        const x = Math.round((elementWidth * current) / basic);
-        const canvas = document.getElementById(elementId);
-        if(canvas.getContext) {
-            //Bar
-            let ctx = canvas.getContext("2d");
-            ctx.clearRect(0, 0, elementWidth, elementHeight);
-            if(type === "health"){
-                ctx.fillStyle = "rgb(200, 0, 0)";
-            }
-            if(type === "experience"){
-                ctx.fillStyle = "rgb(240, 201, 48)";
-            }
-            ctx.fillRect(0, 0, x, elementHeight);
-
-            //Text
-            ctx.fillStyle = "white";
-            ctx.font = canvas.height / 2 + "px Atma";
-            ctx.textAlign = "center";
-            ctx.fillText(current + "/" + basic, canvas.width / 2, (canvas.height / 2) + (canvas.height / 8));
-        }
+        const butt = GameInterface.createBackToMenuButt();
+        butt.addEventListener("click", () => {this.createMenu()});
     }
 }

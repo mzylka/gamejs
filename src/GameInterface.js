@@ -124,7 +124,7 @@ export default class GameInterface{
         }
     }
 
-    static createBackToMenuButt(callback){
+    static createBackToMenuButt(){
         const butt = document.createElement("button");
         const text = document.createTextNode("Back to Main Menu");    
 
@@ -133,5 +133,23 @@ export default class GameInterface{
         butt.appendChild(text);
 
         return butt;
+    }
+
+    static createStoreMenu(){
+        document.getElementById("main").innerHTML = 
+        `<div class="store">
+            <div class="store__offers">
+                <div class="store__healthPoints">
+                <div class="store__info">Health Potions:</div>
+                    <div class="store__buttons">
+                        <button id="buyHP1" type="button">Buy 1 for 5 coins</button>
+                        <button id="buyHP5" type="button">Buy 5 for 25 coins</button>
+                        <button id="buyHP10" type="button">Buy 10 for 50 coins</button>
+                    </div>
+                 </div>
+            </div>
+            <div id="returnToMenu">
+            </div>
+        </div>`;
     }
 }
