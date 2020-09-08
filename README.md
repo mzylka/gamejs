@@ -63,4 +63,5 @@ Jeśli bohater ma wystarczająco dużo monet, może zakupić w sklepie mikstury 
 
 ## Planowane funkcje:
 * Oddzielenie warstwy widoku od logiki
+* Poprawa warstwy wizualnej
 * Nazywanie bohatera podczas tworzenia
