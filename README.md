@@ -8,7 +8,7 @@ Prosta gierka stworzona na potrzeby szlifowania języka JS. W głównej mierze s
 
 ### Stworzenie bohatera
 
-Na początku gracz ma do dyspozycji dwa punkty umiejętności, które może dodać do dwóch głównych statystyk w zależności od preferencji.
+Na początku gracz ma do dyspozycji dwa punkty umiejętności, które może dodać do dwóch głównych statystyk w zależności od preferencji. Aby stworzyć postać należy wydać wszystkie punkty.
 
 ![Tworzenie bohatera](https://mzylka.github.io/portfolio/images/gamejs-huge2.jpg)
 
