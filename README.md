@@ -2,7 +2,7 @@
 
 [Wypróbuj](https://mzylka.github.io/gamejs/dist/index.html)
 
-Prosta gierka stworzona na potrzeby szlifowania języka JS. W głównej mierze skupiłem się do napisania logiki niż wyglądu interfejsu.
+Prosta gierka stworzona na potrzeby szlifowania języka JS. W głównej mierze skupiłem się na warstwie logiki niż wyglądu interfejsu.
 
 ## Przebieg gry
 
